@@ -1,4 +1,4 @@
-#Tarski
+# Tarski
 
 Simple Unity "game" to help you practice with Predicate Logic.
 
