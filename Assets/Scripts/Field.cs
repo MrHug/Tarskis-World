@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 using Random = UnityEngine.Random;
 
 public class Field : MonoBehaviour {
@@ -36,10 +37,15 @@ public class Field : MonoBehaviour {
         }
 
         CreateFieldSlots();
-        AddLetters(numLetters);
-        CreateExpression();
-        DisplayPredicates();
+        Reset();
 	}
+
+    public void Reset()
+    {
+        AddLetters(numLetters);
+        CreateExpressions();
+        DisplayPredicates();
+    }
 
 
     private void AddLetters(int numLetters)
@@ -49,7 +55,10 @@ public class Field : MonoBehaviour {
         List<Vector2> list = new List<Vector2>();
         for (int x = 0; x < boardSize; x++)
             for (int y = 0; y < boardSize; y++)
+            {
                 list.Add(new Vector2(x, y));
+                fieldSlots[x, y].ClearText();
+            }
 
         for (char a = 'a'; a < 'a' + numLetters; a++)
         {
@@ -75,17 +84,56 @@ public class Field : MonoBehaviour {
         }
     }
 
-    private void CreateExpression()
+    private void CreateExpressions()
     {
         this.predicates = new List<PLS>();
-        PLS predicate = new Neg(new UnaryPred(constants["a"], "Red"));
+        PLS predicate = CreateExpression(3);
         this.predicates.Add(predicate);
 
-        predicate = new And(new UnaryPred(constants["b"], "Square"), new UnaryPred(constants["c"], "Green"));
+        predicate = CreateExpression(2);
         this.predicates.Add(predicate);
 
-        predicate = new To(new UnaryPred(constants["d"], "Red"), new UnaryPred(constants["a"], "Square"));
+        predicate = CreateExpression(2);
         this.predicates.Add(predicate);
+    }
+
+    private PLS CreateExpression(int size)
+    {
+        PLS predicate = CreateUnaryExpression();
+        int sizeLeft = size;
+        if (sizeLeft > 0) { 
+            int j = Random.Range(0, 4);
+            PLS newExp = CreateExpression(sizeLeft - 1);
+            switch(j)
+            {
+                case 0:
+                    predicate = new And(predicate, newExp);
+                    break;
+                case 1:
+                    predicate = new Or(predicate, newExp);
+                    break;
+                case 2:
+                    predicate = new To(predicate, newExp);
+                    break;
+                case 3:
+                    predicate = new Equiv(predicate, newExp);
+                    break;
+            }
+        }
+        int i = Random.Range(0, 2);
+        if (i > 0)
+        {
+            predicate = new Neg(predicate);
+        }
+        return predicate;
+    }
+
+    private PLS CreateUnaryExpression()
+    {
+        int i = Random.Range(0, this.constants.Count);
+        Constant c = Utils.RandomValue(this.constants);
+        string property = Utils.RandomProperty();
+        return new UnaryPred(c, property);
     }
 
     private void DisplayPredicates()
@@ -100,10 +148,21 @@ public class Field : MonoBehaviour {
     {
         UpdateConstantProperties();
         bool allTrue = true;
-        foreach(PLS p in this.predicates)
+        for (int i = 0; i < this.predicates.Count; i++)
         {
-            Debug.Log(p.ToString() + "\t" + p.Evaluate());
-            allTrue = allTrue && p.Evaluate();
+            PLS p = this.predicates[i];
+            bool pTrue = p.Evaluate();
+            Debug.Log(p.ToString() + "\t" + pTrue);
+            allTrue = allTrue && pTrue;
+
+            if (pTrue)
+            {
+                this.predicateTexts[i].color = new Color(0, 255, 0);
+            }
+            else
+            {
+                this.predicateTexts[i].color = new Color(255, 0, 0);
+            }
         }
 
         Debug.Log(allTrue);

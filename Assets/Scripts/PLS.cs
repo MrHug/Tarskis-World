@@ -51,6 +51,10 @@ public class Neg: UnaryOP
 
     public override string ToString()
     {
+        if (op1 is UnaryPred)
+        {
+            return "¬" + this.op1.ToString();
+        }
         return "¬("+this.op1.ToString()+")";
     }
 }

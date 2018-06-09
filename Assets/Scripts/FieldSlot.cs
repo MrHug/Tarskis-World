@@ -66,6 +66,11 @@ public class FieldSlot : MonoBehaviour {
         this.textMesh.text = "" + a;
     }
 
+    internal void ClearText()
+    {
+        this.textMesh.text = "";
+    }
+
     public string GetText()
     {
         return this.textMesh.text;
@@ -104,10 +109,10 @@ public class FieldSlot : MonoBehaviour {
     void OnMouseOver() {
         if (Input.GetMouseButtonDown(0))
         {
-            UpdateColor();
+            UpdateShape();
         }
         if(Input.GetMouseButtonDown(1)){
-            UpdateShape();
+            UpdateColor();
         }
     }
 
