@@ -45,6 +45,14 @@ public class Field : MonoBehaviour {
         AddLetters(numLetters);
         CreateExpressions();
         DisplayPredicates();
+        for (int x = 0; x < boardSize; x++)
+        {
+            for (int y = 0; y < boardSize; y++)
+            {
+                fieldSlots[x, y].Reset();
+            }
+        }
+        Evaluate();
     }
 
 

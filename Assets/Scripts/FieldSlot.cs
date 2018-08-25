@@ -19,6 +19,14 @@ public class FieldSlot : MonoBehaviour {
         print(nameObject.GetComponent<TextMesh>());
         this.textMesh = nameObject.GetComponent<TextMesh>();
 	}
+
+    public void Reset()
+    {
+        this.color = 0;
+        this.UpdateColor();
+        this.shape = -1;
+        this.UpdateShape();
+    }
 	
     private void UpdateColor()
     {
