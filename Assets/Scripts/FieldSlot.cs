@@ -42,7 +42,7 @@ public class FieldSlot : MonoBehaviour {
                 newColor = new Color(0, 255, 0);
                 break;
             case 2:
-                newColor = new Color(0, 0, 255);
+                newColor = new Color(0, 255, 255);
                 break;
         }
         this.fieldObjectRenderer.color = newColor;
