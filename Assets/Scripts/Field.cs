@@ -43,16 +43,20 @@ public class Field : MonoBehaviour {
     public void Reset()
     {
         AddLetters(numLetters);
-        CreateExpressions();
-        DisplayPredicates();
-        for (int x = 0; x < boardSize; x++)
+        do
         {
-            for (int y = 0; y < boardSize; y++)
+            CreateExpressions();
+            DisplayPredicates();
+            for (int x = 0; x < boardSize; x++)
             {
-                fieldSlots[x, y].Reset();
+                for (int y = 0; y < boardSize; y++)
+                {
+                    fieldSlots[x, y].Reset();
+                }
             }
-        }
-        Evaluate();
+
+            Evaluate();
+        } while (this.winner.activeSelf);
     }
 
 
