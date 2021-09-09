@@ -170,10 +170,24 @@ public class Field : MonoBehaviour {
             if (pTrue)
             {
                 this.predicateTexts[i].color = new Color(0, 255, 0);
+                
+                if (this.predicateTexts[i].text.StartsWith("✔ ") || this.predicateTexts[i].text.StartsWith("✘ "))
+                {
+                    this.predicateTexts[i].text = this.predicateTexts[i].text.Substring(2);
+                }
+                
+                this.predicateTexts[i].text = this.predicateTexts[i].text.Insert(0, "✔ ");
             }
             else
             {
                 this.predicateTexts[i].color = new Color(255, 0, 0);
+                
+                if (this.predicateTexts[i].text.StartsWith("✔ ") || this.predicateTexts[i].text.StartsWith("✘ "))
+                {
+                    this.predicateTexts[i].text = this.predicateTexts[i].text.Substring(2);
+                }
+                
+                this.predicateTexts[i].text = this.predicateTexts[i].text.Insert(0, "✘ ");
             }
         }
 
